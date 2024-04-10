@@ -42,11 +42,9 @@ def create_nonce():
     nonce = secrets.token_bytes(16)    
     return nonce
 
-def create_ddb_entry(nonce, url):
-    count = "0"
-    res = ddb_client.put_item(TableName=ddb_table, Item={'nonce_id': {'S': nonce.hex()}, 'url': {'S': url}, 'count': {'S': count}})
+def store_nonce(nonce, url):
+    res = ddb_client.put_item(TableName=ddb_table, Item={'nonce_id': {'S': nonce.hex()}, 'url': {'S': url}})
     return res
-
 
 def lambda_handler(event, context):
     logger.info('Received event for generate url : ' + json.dumps(event))
@@ -61,7 +59,7 @@ def lambda_handler(event, context):
     jbody = json.loads(body)
     url = create_presigned_url(jbody['bucket_name'], jbody['object_name'])
     nonce = create_nonce()
-    create_ddb_entry(nonce, url)
+    store_nonce(nonce, url)
     requestContext = json_event["requestContext"]
     domain_name = requestContext["domainName"]
     stage = requestContext["stage"]

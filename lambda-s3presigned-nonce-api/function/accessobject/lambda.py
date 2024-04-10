@@ -22,10 +22,8 @@ def getUrl(nonce):
         return False
 
     if "Item" in response:
-
         url = response["Item"]["url"]
-        count = response["Item"]["count"]
-        if count == "0":
+        if url:
             nonce_table.delete_item(Key={"nonce_id": nonce})
         return url
     else:
