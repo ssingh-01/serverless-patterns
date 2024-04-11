@@ -29,7 +29,7 @@ class PreSignedURLStack(Stack):
             removal_policy=RemovalPolicy.DESTROY,  # This will delete the bucket when the stack is deleted (for demo purposes)
         )
 
-        CfnOutput(self, 'BucketUrl', value=bucket.bucket_name)
+        CfnOutput(self, 'Bucket', value=bucket.bucket_name)
                   
         s3deploy.BucketDeployment(self, 'UploadFile', 
                                   sources=[s3deploy.Source.asset('test')],
@@ -44,9 +44,6 @@ class PreSignedURLStack(Stack):
             ),
             removal_policy=RemovalPolicy.DESTROY,  # This will delete the table when the stack is deleted (for demo purposes)
         )
-
-        # Content Bucket
-        # bucket = s3.Bucket.from_bucket_name(self, "MyBucket", "test-s3pre")
 
         # Lambda function for generating S3 Presigned URL and adding nonce to DynamoDB
         generate_url_lambda = self.create_generate_url_lambda(nonce_table, bucket)

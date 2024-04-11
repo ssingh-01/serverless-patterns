@@ -30,11 +30,11 @@ def validate_nonce(nonce):
     try:
         response = nonce_table.get_item(Key={'nonce_id': nonce}) 
         print('The ddb key response is {}'.format(response))
-   
+
     except ClientError as e:
         logger.error(e)
         return False
-        
+
     if 'Item' in response:
         # Nonce found
             return True
